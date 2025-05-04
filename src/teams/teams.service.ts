@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Team } from '../interfaces/team.interface';
+import { Team } from '../interfaces/team';
 
 @Injectable()
 export class TeamsService {

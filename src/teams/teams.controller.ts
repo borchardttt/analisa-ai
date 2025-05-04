@@ -10,7 +10,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
-import { Team } from '../interfaces/team.interface';
+import { Team } from '../interfaces/team';
 
 @Controller('teams')
 export class TeamsController {
