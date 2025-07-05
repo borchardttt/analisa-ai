@@ -14,6 +14,8 @@ export class CreatePlayerDto {
   @IsInt({ message: 'O teamId deve ser um número inteiro.' })
   @Type(() => Number)
   teamId: number;
+
+  @IsOptional() // torna o campo opcional
   @IsString({ message: 'A posição deve ser uma string válida.' })
-  position: string;
+  position?: string;
 }

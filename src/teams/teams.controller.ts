@@ -2,49 +2,43 @@ import {
   Controller,
   Get,
   Post,
-  Put,
+  Body,
+  Param,
   Patch,
   Delete,
-  Param,
-  Body,
-  HttpCode,
+  ParseIntPipe,
 } from '@nestjs/common';
+import { CreateTeamDto } from './dto/create-team.dto';
 import { TeamsService } from './teams.service';
-import { Team } from '../interfaces/team';
-
 @Controller('teams')
 export class TeamsController {
-  constructor(private readonly teamsService: TeamsService) {}
-
-  @Post()
-  @HttpCode(201)
-  create(@Body() createTeam: Omit<Team, 'id'>) {
-    return this.teamsService.create(createTeam);
-  }
+  constructor(private teamsService: TeamsService) {}
 
   @Get()
-  findAll(): Team[] {
+  findAll() {
     return this.teamsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Team {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.teamsService.findOne(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() data: Partial<Team>): Team {
-    return this.teamsService.update(id, data);
+  @Post()
+  create(@Body() data: CreateTeamDto) {
+    return this.teamsService.create(data);
   }
 
   @Patch(':id')
-  partialUpdate(@Param('id') id: string, @Body() data: Partial<Team>): Team {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: Partial<CreateTeamDto>,
+  ) {
     return this.teamsService.update(id, data);
   }
 
   @Delete(':id')
-  @HttpCode(204)
-  remove(@Param('id') id: string): void {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.teamsService.remove(id);
   }
 }
