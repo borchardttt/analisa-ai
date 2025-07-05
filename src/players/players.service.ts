@@ -1,34 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Player } from 'src/interfaces/player';
+import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { CreatePlayerDto } from './dto/create-player-dto';
 
 @Injectable()
 export class PlayersService {
-  private players: Player[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(player) {
-    const newPlayer: Player = {
-      id: (this.players.length + 1).toString(),
-      ...player,
-    };
-    this.players.push(newPlayer);
-    return newPlayer;
+  async create(data: CreatePlayerDto): Promise<any> {
+    return this.prisma.player.create({ data });
   }
 
-  findAll(filter?: string, page: number = 1): Player[] {
-    let result = this.players;
-
-    if (filter) {
-      result = result.filter((player) =>
-        player.name.toLowerCase().includes(filter.toLowerCase()),
-      );
-    }
-
+  async findAll(filter?: string, page = 1): Promise<any[]> {
     const pageSize = 5;
-    return result.slice((page - 1) * pageSize, page * pageSize);
+
+    const where = filter
+      ? { name: { contains: filter, mode: 'insensitive' } }
+      : {};
+
+    return this.prisma.player.findMany({
+      where,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
   }
 
-  findOne(id: string): Player {
-    const player = this.players.find((p) => p.id === id);
+  async findOne(id: number): Promise<any> {
+    const player = await this.prisma.player.findUnique({ where: { id } });
     if (!player) throw new NotFoundException('Jogador não encontrado');
     return player;
   }

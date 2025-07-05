@@ -8,12 +8,14 @@ import {
   ParseIntPipe,
   UseInterceptors,
   UseFilters,
+  UseGuards,
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player-dto';
 import { QueryFilterDto } from './dto/query-filter.dto';
 import { ResponseInterceptor } from 'src/response/response.interceptor';
 import { CustomExceptionFilter } from 'src/custom-exception/custom-exception.filter';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('players')
 @UseFilters(CustomExceptionFilter)
@@ -21,18 +23,21 @@ import { CustomExceptionFilter } from 'src/custom-exception/custom-exception.fil
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createPlayerDto: CreatePlayerDto) {
     return this.playersService.create(createPlayerDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll(@Query() queryFilter: QueryFilterDto) {
     return this.playersService.findAll(queryFilter.filter, queryFilter.page);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.playersService.findOne(id);
   }
 }
