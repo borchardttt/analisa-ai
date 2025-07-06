@@ -85,9 +85,9 @@ Organizados para garantir a modularidade e escalabilidade do projeto desde o in�
 
 🧪 RA3 – Realizar testes automatizados para garantir a qualidade da API
 
-[] ID12: Implementação de testes (unitários/integrados) com Jest
+[x] ID12: Implementação de testes (unitários/integrados) com Jest
 
-[] ID13: Cobertura de testes para rotas e serviços principais (incluindo CRUD)
+[x] ID13: Cobertura de testes para rotas e serviços principais (incluindo CRUD)
 
 🌐 RA4 – Gerar documentação da API e realizar o deploy
 
