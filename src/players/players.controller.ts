@@ -13,8 +13,8 @@ import {
 import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player-dto';
 import { QueryFilterDto } from './dto/query-filter.dto';
-import { ResponseInterceptor } from 'src/response/response.interceptor';
-import { CustomExceptionFilter } from 'src/custom-exception/custom-exception.filter';
+import { ResponseInterceptor } from '../response/response.interceptor';
+import { CustomExceptionFilter } from '../custom-exception/custom-exception.filter';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('players')
