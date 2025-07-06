@@ -4,13 +4,24 @@ import {
   Post,
   Body,
   Param,
-  Patch,
+  Put,
   Delete,
   ParseIntPipe,
+  UseGuards,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateTeamDto } from './dto/create-team.dto';
+import { UpdateTeamDto } from './dto/update-team.dto';
 import { TeamsService } from './teams.service';
+import { AuthGuard } from '@nestjs/passport';
+import { ResponseInterceptor } from '../response/response.interceptor';
+import { CustomExceptionFilter } from '../custom-exception/custom-exception.filter';
+
 @Controller('teams')
+@UseGuards(AuthGuard('jwt'))
+@UseFilters(CustomExceptionFilter)
+@UseInterceptors(ResponseInterceptor)
 export class TeamsController {
   constructor(private teamsService: TeamsService) {}
 
@@ -29,10 +40,10 @@ export class TeamsController {
     return this.teamsService.create(data);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: Partial<CreateTeamDto>,
+    @Body() data: UpdateTeamDto,
   ) {
     return this.teamsService.update(id, data);
   }
